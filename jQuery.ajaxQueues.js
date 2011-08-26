@@ -10,7 +10,7 @@
  
  (function($) {
   var queues = { 
-    default: newRequestContext();
+    queue: newRequestContext()
   };
   
   function newRequestContext(opts) {
@@ -71,7 +71,7 @@
   });
 
   $.ajaxTransport('queued',function(options, originalOptions, jqXHR) { 
-      var thisQueue = options.queue || 'default';
+      var thisQueue = options.queue || 'queue';
       if (queues.hasOwnProperty(thisQueue)) {
         return {
           send: function(headers, completeCallback) {
