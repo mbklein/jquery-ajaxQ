@@ -1,4 +1,14 @@
-(function($) {
+/*!
+ * jQuery AJAX Request Queueing Transport Plugin 0.1.0
+ * http://github.com/mbklein/jquery-ajax-queue.git
+ * Requires jQuery 1.5+
+ *
+ * Copyright Michael B. Klein
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ */
+ 
+ (function($) {
   var queues = { 
     default: newRequestContext();
   };
