@@ -59,10 +59,15 @@
 
   function cancelRequest(queueName, deferred) {
     var thisQueue = queues[queueName];
-    for (var i = 0; i < thisQueue.length; i++) {
-      if (thisQueue[i].deferred == deferred) {
-        thisQueue.splice(i,1).deferred.reject(deferred, 'aborted');
+    if (thisQueue) {
+      for (var i = 0; i < thisQueue.requests.length; i++) {
+        if (thisQueue.requests[i].deferred == deferred) {
+          thisQueue.requests.splice(i,1);
+          deferred.reject(deferred, 'aborted');
+        }
       }
+    } else {
+      throw "QueueError: queue '" + options.queue + "' is not defined."
     }
   }
 
@@ -75,12 +80,14 @@
         }
       },
       clearQ: function(queueName) {
-        var thisQueue = queues[queueName];
+        var thisQueue = queues[queueName || 'queue'];
         if (thisQueue) {
-          for (var i = 0; i < thisQueue.length; i++) {
-            var context = thisQueue[i];
-            cancelRequest(queueName, context.xhr);
+          while (thisQueue.requests.length > 0) {
+            var context = thisQueue.requests[0];
+            cancelRequest(queueName, context.deferred);
           }
+        } else {
+          throw "QueueError: queue '" + options.queue + "' is not defined."
         }
       }
   });
@@ -95,6 +102,9 @@
         promise.success = promise.done;
         promise.error = promise.fail;
         promise.complete = deferred.done;
+        promise.abort = function() {
+          cancelRequest(queueName, deferred);
+        }
         delete opts['ajaxQ'];
         queueRequest(thisQueue, opts, deferred);
         return promise;
