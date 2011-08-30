@@ -9,9 +9,7 @@
  */
  
 (function($) {
-  var queues = { 
-    queue: newRequestQueue()
-  };
+  var queues = {};
 
   function newRequestQueue(opts) {
     opts = opts || {}
@@ -80,7 +78,7 @@
         }
       },
       clearQ: function(queueName) {
-        var thisQueue = queues[queueName || 'queue'];
+        var thisQueue = queues[queueName];
         if (thisQueue) {
           while (thisQueue.requests.length > 0) {
             var context = thisQueue.requests[0];
@@ -95,7 +93,7 @@
   var originalAjax = $.ajax;
   $.ajax = function(opts) {
     if (opts.ajaxQ) {
-      var thisQueue = opts.ajaxQ || 'queue';
+      var thisQueue = opts.ajaxQ;
       if (queues.hasOwnProperty(thisQueue)) {
         var deferred = $.Deferred();
         var promise = deferred.promise();
