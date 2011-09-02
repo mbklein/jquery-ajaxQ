@@ -99,7 +99,7 @@
         var promise = deferred.promise();
         promise.success = promise.done;
         promise.error = promise.fail;
-        promise.complete = promise.then;
+        promise.complete = promise.always;
         promise.abort = function() {
           cancelRequest(queueName, deferred);
         }
