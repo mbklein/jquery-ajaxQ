@@ -1,5 +1,5 @@
 /*!
- * jQuery AJAX Request Queueing Transport Plugin 0.1.1
+ * jQuery AJAX Request Queueing Transport Plugin 0.1.2
  * http://github.com/mbklein/jquery-ajax-queue.git
  * Requires jQuery 1.5+
  *
@@ -7,7 +7,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  */
- 
+
 (function($) {
   var queues = {};
 
@@ -25,7 +25,7 @@
       if (context.ajaxOptions.dequeued) {
         context.ajaxOptions.dequeued(context.xhr);
       }
-      
+
       var jqxhr = $.ajax(context.ajaxOptions);
       jqxhr.success(function(data, status, xhr) {
         context.deferred.resolve(data, status, xhr);
@@ -34,7 +34,7 @@
       jqxhr.error(function(jqXHR, status, error) {
         context.deferred.reject(jqXHR, status, error);
       });
-      
+
       jqxhr.complete(function(jqXHR, status, error) {
         requestComplete(queueName);
       })
@@ -65,7 +65,7 @@
         }
       }
     } else {
-      throw "QueueError: queue '" + options.queue + "' is not defined."
+      throw "QueueError: queue '" + queueName + "' is not defined."
     }
   }
 
@@ -74,7 +74,7 @@
         if (! queues.hasOwnProperty(queueName)) {
             queues[queueName] = newRequestQueue(opts);
         } else {
-            throw "QueueError: queue '" + options.queue + "' is already defined."
+            throw "QueueError: queue '" + queueName + "' is already defined."
         }
       },
       clearQ: function(queueName) {
@@ -85,7 +85,7 @@
             cancelRequest(queueName, context.deferred);
           }
         } else {
-          throw "QueueError: queue '" + options.queue + "' is not defined."
+          throw "QueueError: queue '" + queueName + "' is not defined."
         }
       }
   });
@@ -107,7 +107,7 @@
         queueRequest(thisQueue, opts, deferred);
         return promise;
       } else {
-        throw "QueueError: queue '" + options.queue + "' is not defined."
+        throw "QueueError: queue '" + thisQueue + "' is not defined."
       }
     } else {
       return originalAjax(opts);
